@@ -53,7 +53,7 @@ export async function GET() {
 
         if (user) {
             [userNeedsCount, userCohortsCount, userPlansCount] = await Promise.all([
-                prisma.needSignal.count({ where: { createdById: user.id } }),
+                prisma.needSignal.count({ where: { userId: user.id } }),
                 prisma.cohort.count({ where: { createdById: user.id } }),
                 prisma.plan.count({ where: { createdById: user.id } }),
             ]);
