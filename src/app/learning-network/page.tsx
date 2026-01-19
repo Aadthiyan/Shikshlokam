@@ -414,7 +414,7 @@ export default function LearningNetworkPage() {
                 {/* Header */}
                 <div className="mb-8">
                     <Link
-                        href="/"
+                        href="/dashboard-home"
                         className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
                     >
                         ← Back to Home

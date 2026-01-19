@@ -318,7 +318,7 @@ export default function GamificationPage() {
                 {/* Header */}
                 <div className="mb-8">
                     <Link
-                        href="/"
+                        href="/dashboard-home"
                         className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
                     >
                         ← Back to Home
@@ -415,8 +415,8 @@ export default function GamificationPage() {
                             <div
                                 key={milestone.id}
                                 className={`rounded-lg border p-4 ${milestone.achieved
-                                        ? 'bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20'
-                                        : 'bg-background'
+                                    ? 'bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20'
+                                    : 'bg-background'
                                     }`}
                             >
                                 <div className="flex items-start gap-3">
@@ -444,8 +444,8 @@ export default function GamificationPage() {
                                     <div
                                         key={badge.id}
                                         className={`rounded-lg border p-4 ${badge.earned
-                                                ? "bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20"
-                                                : "bg-background"
+                                            ? "bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20"
+                                            : "bg-background"
                                             }`}
                                     >
                                         <div className="flex items-start gap-4">
@@ -509,8 +509,8 @@ export default function GamificationPage() {
                                     <div
                                         key={entry.rank}
                                         className={`rounded-lg border p-4 ${entry.rank <= 3
-                                                ? "bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20"
-                                                : "bg-background"
+                                            ? "bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20"
+                                            : "bg-background"
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
