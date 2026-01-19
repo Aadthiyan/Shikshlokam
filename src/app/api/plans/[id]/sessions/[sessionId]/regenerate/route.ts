@@ -11,10 +11,10 @@ import { CohortService } from "@/services/cohort.service";
 
 export async function POST(
     request: NextRequest,
-    { params }: { params: { id: string; sessionId: string } }
+    { params }: { params: Promise<{ id: string; sessionId: string }> }
 ) {
     try {
-        const { id: planId, sessionId } = params;
+        const { id: planId, sessionId } = await params;
 
         // Get plan with session and cohort
         const plan = await prisma.plan.findUnique({
@@ -97,8 +97,8 @@ export async function POST(
                         objectives: newModule.objectives,
                         durationMinutes: newModule.durationMinutes,
                         trainerNotes: `Regenerated session. ${cohortProfile.infrastructureLevel === "LOW"
-                                ? "Focus on offline activities. "
-                                : ""
+                            ? "Focus on offline activities. "
+                            : ""
                             }Adapt examples for ${cohortProfile.language} context.`,
                     },
                     include: {

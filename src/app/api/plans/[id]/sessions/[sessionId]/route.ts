@@ -9,10 +9,10 @@ import { DatabaseService } from "@/services/database.service";
 
 export async function PATCH(
     request: NextRequest,
-    { params }: { params: { id: string; sessionId: string } }
+    { params }: { params: Promise<{ id: string; sessionId: string }> }
 ) {
     try {
-        const { id: planId, sessionId } = params;
+        const { id: planId, sessionId } = await params;
         const body = await request.json();
         const { trainerNotes } = body;
 
