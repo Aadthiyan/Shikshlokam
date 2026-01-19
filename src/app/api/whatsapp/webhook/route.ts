@@ -119,12 +119,13 @@ export async function POST(request: NextRequest) {
                 data: {
                     name: needData.clusterName,
                     district: "Unknown",
+                    block: "Unknown",
                     state: "Unknown",
-                    language: needData.language,
+                    primaryLanguage: needData.language,
                     infrastructureLevel: needData.infrastructureLevel,
-                    schoolCount: 1,
-                    teacherCount: 10,
-                    studentCount: needData.studentCount || 100,
+                    schoolsCount: 1,
+                    teacherCountEstimate: 10,
+                    studentCountEstimate: needData.studentCount || 100,
                 },
             });
         }
@@ -133,14 +134,12 @@ export async function POST(request: NextRequest) {
         const need = await prisma.needSignal.create({
             data: {
                 clusterId: cluster.id,
-                reportedById: user.id,
-                primaryIssue: needData.primaryIssue,
-                gradeBand: needData.gradeBand,
-                language: needData.language,
-                infrastructureLevel: needData.infrastructureLevel,
-                studentCountEstimate: needData.studentCount || 0,
-                description: needData.description,
-                source: "WHATSAPP",
+                userId: user.id,
+                grades: [needData.gradeBand || "PRIMARY_1_3"],
+                subjects: ["General"],
+                issueTags: [needData.primaryIssue || "FLN_gaps"],
+                notes: needData.description || body,
+                reportedBy: "WhatsApp Reporter",
             },
         });
 
