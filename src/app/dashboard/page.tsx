@@ -244,7 +244,7 @@ export default function DashboardPage() {
     };
 
     const renderWidget = (widgetId: string) => {
-        const widgets: Record<string, JSX.Element> = {
+        const widgets: Record<string, React.JSX.Element> = {
             needsByDistrict: (
                 <div
                     className="rounded-lg border bg-card p-6 cursor-move"
@@ -466,8 +466,8 @@ export default function DashboardPage() {
                             <button
                                 onClick={() => setTimeRange("7d")}
                                 className={`rounded-lg px-4 py-2 text-sm font-semibold ${timeRange === "7d"
-                                        ? "bg-primary text-primary-foreground"
-                                        : "border hover:bg-muted"
+                                    ? "bg-primary text-primary-foreground"
+                                    : "border hover:bg-muted"
                                     }`}
                             >
                                 7 Days
@@ -475,8 +475,8 @@ export default function DashboardPage() {
                             <button
                                 onClick={() => setTimeRange("30d")}
                                 className={`rounded-lg px-4 py-2 text-sm font-semibold ${timeRange === "30d"
-                                        ? "bg-primary text-primary-foreground"
-                                        : "border hover:bg-muted"
+                                    ? "bg-primary text-primary-foreground"
+                                    : "border hover:bg-muted"
                                     }`}
                             >
                                 30 Days
@@ -484,8 +484,8 @@ export default function DashboardPage() {
                             <button
                                 onClick={() => setTimeRange("all")}
                                 className={`rounded-lg px-4 py-2 text-sm font-semibold ${timeRange === "all"
-                                        ? "bg-primary text-primary-foreground"
-                                        : "border hover:bg-muted"
+                                    ? "bg-primary text-primary-foreground"
+                                    : "border hover:bg-muted"
                                     }`}
                             >
                                 All Time
@@ -513,8 +513,8 @@ export default function DashboardPage() {
                                     <button
                                         onClick={() => loadPreset(preset)}
                                         className={`rounded-lg px-3 py-1 text-sm ${selectedPreset === preset.id
-                                                ? "bg-primary text-primary-foreground"
-                                                : "border hover:bg-muted"
+                                            ? "bg-primary text-primary-foreground"
+                                            : "border hover:bg-muted"
                                             }`}
                                     >
                                         {preset.name}
