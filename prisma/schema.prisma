@@ -1,0 +1,370 @@
+// Prisma Schema for DIET Training OS
+// Database: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER MANAGEMENT
+// ============================================
+
+model User {
+  id            String   @id @default(cuid())
+  clerkId       String   @unique // Clerk user ID
+  email         String   @unique
+  name          String?
+  dietName      String?  @map("diet_name") // DIET/SCERT name
+  role          UserRole @default(PLANNER)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  needSignals      NeedSignal[]
+  cohorts          Cohort[]
+  plans            Plan[]
+  sessionFeedbacks SessionFeedback[]
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  PLANNER      // DIET/SCERT planner
+  BRP          // Block Resource Person
+  CRP          // Cluster Resource Person
+  TRAINER      // Master trainer
+}
+
+// ============================================
+// CLUSTER & SCHOOL MASTER DATA
+// ============================================
+
+model Cluster {
+  id                    String   @id @default(cuid())
+  udiseCode             String?  @unique @map("udise_code") // 11-digit UDISE+ code
+  name                  String
+  district              String
+  block                 String
+  state                 String   @default("Jharkhand")
+  languages             String[] // ["Hindi", "Mundari", "Ho"]
+  primaryLanguage       String   @map("primary_language")
+  infrastructureLevel   InfraLevel @map("infrastructure_level")
+  type                  String?  // "tribal_belt", "rural", "urban"
+  schoolsCount          Int      @default(0) @map("schools_count")
+  teacherCountEstimate  Int      @default(0) @map("teacher_count_estimate")
+  studentCountEstimate  Int      @default(0) @map("student_count_estimate")
+  
+  // Infrastructure details (JSON)
+  infrastructureDetails Json?    @map("infrastructure_details")
+  // { electricity, internet, projector, library, computerLab, toilets, drinkingWater, playground }
+  
+  // Demographics (JSON)
+  demographics          Json?
+  // { tribalPopulationPercent, scStPercent, girlsEnrollmentPercent }
+  
+  metadata              Json?    // Additional flexible data
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  needSignals NeedSignal[]
+
+  @@index([district, block])
+  @@index([infrastructureLevel])
+  @@map("clusters")
+}
+
+enum InfraLevel {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+// ============================================
+// NEEDS CAPTURE
+// ============================================
+
+model NeedSignal {
+  id          String   @id @default(cuid())
+  clusterId   String   @map("cluster_id")
+  cluster     Cluster  @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  
+  userId      String?  @map("user_id") // BRP/CRP who reported
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  grades      String[] // ["1", "2", "3"]
+  subjects    String[] // ["Hindi", "Mathematics"]
+  issueTags   String[] @map("issue_tags") // ["FLN_gaps", "language_mismatch"]
+  notes       String?  @db.Text
+  
+  // Metrics (JSON)
+  metrics     Json?
+  // { readingBelowGradeLevelPercent, attendanceRate, teacherStudentRatio }
+  
+  reportedBy  String?  @map("reported_by") // Name of reporter
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relations
+  cohorts     CohortNeedSignal[]
+
+  @@index([clusterId])
+  @@index([createdAt])
+  @@map("need_signals")
+}
+
+// ============================================
+// COHORT MANAGEMENT
+// ============================================
+
+model Cohort {
+  id                    String   @id @default(cuid())
+  name                  String
+  description           String   @db.Text
+  tags                  String[] // ["FLN", "tribal", "multilingual", "low_infra"]
+  
+  primaryIssues         String[] @map("primary_issues") // Main issue tags
+  language              String?
+  gradeBand             String?  @map("grade_band") // "primary_1_3", "primary_4_5", "secondary"
+  infrastructureLevel   InfraLevel? @map("infrastructure_level")
+  
+  teacherCountEstimate  Int      @default(0) @map("teacher_count_estimate")
+  clusterCount          Int      @default(0) @map("cluster_count")
+  
+  createdById           String   @map("created_by_id")
+  createdBy             User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  needSignals CohortNeedSignal[]
+  plans       Plan[]
+
+  @@index([createdAt])
+  @@index([infrastructureLevel])
+  @@map("cohorts")
+}
+
+// Join table for Cohort <-> NeedSignal (many-to-many)
+model CohortNeedSignal {
+  cohortId      String @map("cohort_id")
+  needSignalId  String @map("need_signal_id")
+  
+  cohort        Cohort     @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  needSignal    NeedSignal @relation(fields: [needSignalId], references: [id], onDelete: Cascade)
+
+  @@id([cohortId, needSignalId])
+  @@map("cohort_need_signals")
+}
+
+// ============================================
+// MODULE LIBRARY
+// ============================================
+
+model Module {
+  id                String   @id @default(cuid())
+  title             String
+  theme             String   // "FLN", "Classroom Management", "Language Contextualization"
+  competencyTags    String[] @map("competency_tags") // ["reading_pedagogy", "assessment"]
+  durationMinutes   Int      @map("duration_minutes")
+  gradeBand         String   @map("grade_band") // "primary_1_3", "primary_4_5", "secondary", "all"
+  language          String   // "Hindi", "English", "Any"
+  infraTags         String[] @map("infra_tags") // ["offline_feasible", "no_tech_required", "projector_required"]
+  description       String   @db.Text
+  objectives        String[] // Learning objectives (array of strings)
+  contentUrl        String?  @map("content_url") // Link to DIKSHA/external content
+  
+  isActive          Boolean  @default(true) @map("is_active")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  planSessions PlanSession[]
+
+  @@index([theme])
+  @@index([gradeBand])
+  @@index([language])
+  @@map("modules")
+}
+
+// ============================================
+// TRAINING PLAN GENERATION
+// ============================================
+
+model Plan {
+  id          String     @id @default(cuid())
+  name        String
+  cohortId    String     @map("cohort_id")
+  cohort      Cohort     @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  
+  status      PlanStatus @default(DRAFT)
+  
+  totalDurationMinutes Int @default(0) @map("total_duration_minutes")
+  sessionCount         Int @default(0) @map("session_count")
+  
+  createdById String   @map("created_by_id")
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  
+  publishedAt DateTime? @map("published_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  sessions PlanSession[]
+
+  @@index([cohortId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("plans")
+}
+
+enum PlanStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model PlanSession {
+  id            String  @id @default(cuid())
+  planId        String  @map("plan_id")
+  plan          Plan    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  moduleId      String  @map("module_id")
+  module        Module  @relation(fields: [moduleId], references: [id], onDelete: Restrict)
+  
+  sessionNumber Int     @map("session_number") // 1, 2, 3, 4 for session number
+  orderIndex    Int     @map("order_index") // 0, 1, 2, 3 for session order
+  title         String  // Can be customized from module title
+  objectives    String[] // Can be customized from module objectives
+  durationMinutes Int   @default(45) @map("duration_minutes") // Session duration
+  trainerNotes  String? @db.Text @map("trainer_notes") // AI-generated contextual notes
+  
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  feedbacks SessionFeedback[]
+
+  @@unique([planId, orderIndex])
+  @@index([planId])
+  @@map("plan_sessions")
+}
+
+// ============================================
+// FEEDBACK & ANALYTICS
+// ============================================
+
+model SessionFeedback {
+  id              String   @id @default(cuid())
+  planSessionId   String   @map("plan_session_id")
+  planSession     PlanSession @relation(fields: [planSessionId], references: [id], onDelete: Cascade)
+  
+  userId          String?  @map("user_id") // Trainer who gave feedback
+  user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  // Ratings (1-5 scale)
+  relevanceScore  Int      @map("relevance_score") // 1-5
+  confidenceScore Int      @map("confidence_score") // 1-5 (teacher confidence gain)
+  
+  // Text feedback
+  comments        String?  @db.Text
+  unresolvedIssues String[] @map("unresolved_issues") // Tags of issues still remaining
+  trainerNotes    String?  @db.Text @map("trainer_notes") // Optional trainer observations
+  teacherReactions String? @db.Text @map("teacher_reactions") // Optional teacher feedback
+  
+  // Metadata
+  submittedBy     String?  @map("submitted_by") // Name of person submitting
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([planSessionId])
+  @@index([createdAt])
+  @@map("session_feedbacks")
+}
+
+// ============================================
+// GAMIFICATION SYSTEM
+// ============================================
+
+// User Badges - Track earned badges
+model UserBadge {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  badgeId     String   @map("badge_id") // e.g., "first-need", "super-reporter"
+  earnedAt    DateTime @default(now()) @map("earned_at")
+  
+  // Badge details (denormalized for performance)
+  badgeName   String   @map("badge_name")
+  badgeIcon   String   @map("badge_icon")
+  
+  @@unique([userId, badgeId])
+  @@index([userId])
+  @@index([earnedAt])
+  @@map("user_badges")
+}
+
+// User Streaks - Track daily activity streaks
+model UserStreak {
+  id            String   @id @default(cuid())
+  userId        String   @unique @map("user_id")
+  currentStreak Int      @default(0) @map("current_streak")
+  longestStreak Int      @default(0) @map("longest_streak")
+  lastActiveDate DateTime @map("last_active_date")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  
+  @@index([userId])
+  @@map("user_streaks")
+}
+
+// User Points - Track point history
+model UserPoints {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  points      Int      @default(0)
+  action      String   // "need_reported", "cohort_created", "plan_generated", etc.
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  
+  @@index([userId])
+  @@index([createdAt])
+  @@map("user_points")
+}
+
+// User Achievements - Track milestones
+model UserAchievement {
+  id             String   @id @default(cuid())
+  userId         String   @map("user_id")
+  achievementId  String   @map("achievement_id") // e.g., "first-need", "10-needs", "week-streak"
+  title          String
+  description    String
+  achievedAt     DateTime @default(now()) @map("achieved_at")
+  
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@index([achievedAt])
+  @@map("user_achievements")
+}
+
+// User Stats Summary - Cached aggregated stats
+model UserStats {
+  id                String   @id @default(cuid())
+  userId            String   @unique @map("user_id")
+  totalPoints       Int      @default(0) @map("total_points")
+  needsReported     Int      @default(0) @map("needs_reported")
+  cohortsCreated    Int      @default(0) @map("cohorts_created")
+  plansGenerated    Int      @default(0) @map("plans_generated")
+  badgesEarned      Int      @default(0) @map("badges_earned")
+  achievementsCount Int      @default(0) @map("achievements_count")
+  rank              Int?     // Leaderboard rank
+  lastUpdated       DateTime @updatedAt @map("last_updated")
+  
+  @@index([userId])
+  @@index([totalPoints])
+  @@map("user_stats")
+}
