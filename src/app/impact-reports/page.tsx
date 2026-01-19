@@ -529,14 +529,8 @@ export default function ImpactReportsPage() {
                 <div className="grid gap-6 lg:grid-cols-2" ref={chartsRef}>
                     {/* Trends Over Time */}
                     <div className="rounded-lg border bg-card p-6" ref={trendsChartRef}>
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="mb-4">
                             <h2 className="text-xl font-bold">Activity Trends</h2>
-                            <button
-                                onClick={() => exportChartAsImage(trendsChartRef, 'trends-chart')}
-                                className="text-xs text-primary hover:underline"
-                            >
-                                Export as Image
-                            </button>
                         </div>
                         <ResponsiveContainer width="100%" height={300}>
                             <LineChart data={report.trendsData}>
@@ -554,14 +548,8 @@ export default function ImpactReportsPage() {
 
                     {/* Issues Resolved */}
                     <div className="rounded-lg border bg-card p-6" ref={issuesChartRef}>
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="mb-4">
                             <h2 className="text-xl font-bold">Issues Addressed</h2>
-                            <button
-                                onClick={() => exportChartAsImage(issuesChartRef, 'issues-chart')}
-                                className="text-xs text-primary hover:underline"
-                            >
-                                Export as Image
-                            </button>
                         </div>
                         <ResponsiveContainer width="100%" height={300}>
                             <PieChart>
@@ -570,7 +558,7 @@ export default function ImpactReportsPage() {
                                     cx="50%"
                                     cy="50%"
                                     labelLine={false}
-                                    label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                                    label={({ name, percent }) => `${name} (${((percent || 0) * 100).toFixed(0)}%)`}
                                     outerRadius={100}
                                     fill="#8884d8"
                                     dataKey="value"
@@ -586,17 +574,11 @@ export default function ImpactReportsPage() {
 
                     {/* Impact by District */}
                     <div className="rounded-lg border bg-card p-6 lg:col-span-2" ref={districtChartRef}>
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="mb-4">
                             <h2 className="text-xl font-bold">Impact by District (Click for Details)</h2>
-                            <button
-                                onClick={() => exportChartAsImage(districtChartRef, 'district-chart')}
-                                className="text-xs text-primary hover:underline"
-                            >
-                                Export as Image
-                            </button>
                         </div>
                         <ResponsiveContainer width="100%" height={300}>
-                            <BarChart data={report.impactByDistrict} onClick={(data) => data?.activePayload && handleDistrictClick(data.activePayload[0].payload)}>
+                            <BarChart data={report.impactByDistrict} onClick={(data: any) => data?.activePayload && handleDistrictClick(data.activePayload[0].payload)}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="name" />
                                 <YAxis />
