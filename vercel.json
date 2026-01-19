@@ -1,54 +1,8 @@
 {
-    "$schema": "https://openapi.vercel.sh/vercel.json",
-    "buildCommand": "npm run build",
-    "devCommand": "npm run dev",
-    "installCommand": "npm install",
     "framework": "nextjs",
+    "buildCommand": "prisma generate && next build",
+    "installCommand": "npm install",
     "regions": [
         "bom1"
-    ],
-    "env": {
-        "DATABASE_URL": {
-            "type": "secret"
-        },
-        "GROQ_API_KEY": {
-            "type": "secret"
-        },
-        "OPENAI_API_KEY": {
-            "type": "secret"
-        },
-        "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": {
-            "type": "secret"
-        },
-        "CLERK_SECRET_KEY": {
-            "type": "secret"
-        },
-        "NEXT_PUBLIC_APP_URL": {
-            "type": "system",
-            "value": "VERCEL_URL"
-        }
-    },
-    "build": {
-        "env": {
-            "SKIP_ENV_VALIDATION": "true"
-        }
-    },
-    "headers": [
-        {
-            "source": "/api/(.*)",
-            "headers": [
-                {
-                    "key": "Cache-Control",
-                    "value": "no-store, must-revalidate"
-                }
-            ]
-        }
-    ],
-    "redirects": [
-        {
-            "source": "/docs",
-            "destination": "/README.md",
-            "permanent": false
-        }
     ]
 }
