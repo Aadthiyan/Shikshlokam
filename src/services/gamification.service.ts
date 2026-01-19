@@ -14,7 +14,7 @@ export const BADGES = {
         requirement: 1,
         checkProgress: async (userId: string) => {
             const count = await prisma.needSignal.count({
-                where: { createdById: userId }
+                where: { userId: userId }
             });
             return { progress: count, earned: count >= 1 };
         }
@@ -26,7 +26,7 @@ export const BADGES = {
         requirement: 5,
         checkProgress: async (userId: string) => {
             const count = await prisma.needSignal.count({
-                where: { createdById: userId }
+                where: { userId: userId }
             });
             return { progress: count, earned: count >= 5 };
         }
@@ -38,7 +38,7 @@ export const BADGES = {
         requirement: 10,
         checkProgress: async (userId: string) => {
             const count = await prisma.needSignal.count({
-                where: { createdById: userId }
+                where: { userId: userId }
             });
             return { progress: count, earned: count >= 10 };
         }
@@ -50,7 +50,7 @@ export const BADGES = {
         requirement: 25,
         checkProgress: async (userId: string) => {
             const count = await prisma.needSignal.count({
-                where: { createdById: userId }
+                where: { userId: userId }
             });
             return { progress: count, earned: count >= 25 };
         }
@@ -270,7 +270,7 @@ export async function getStreak(userId: string) {
 export async function updateUserStats(userId: string) {
     // Get counts
     const [needsCount, cohortsCount, plansCount, badgesCount, pointsSum] = await Promise.all([
-        prisma.needSignal.count({ where: { createdById: userId } }),
+        prisma.needSignal.count({ where: { userId: userId } }),
         prisma.cohort.count({ where: { createdById: userId } }),
         prisma.plan.count({ where: { createdById: userId } }),
         prisma.userBadge.count({ where: { userId } }),
