@@ -55,7 +55,10 @@ export async function PUT(
             sessionCount: plan.sessionCount,
             totalDurationMinutes: plan.totalDurationMinutes,
             sessions: plan.sessions,
-            cohort: plan.cohort,
+            cohort: {
+                primaryIssues: plan.cohort.primaryIssues,
+                infrastructureLevel: plan.cohort.infrastructureLevel || "MEDIUM",
+            },
         });
 
         if (!validation.isValid) {
