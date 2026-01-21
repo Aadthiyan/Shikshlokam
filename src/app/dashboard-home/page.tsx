@@ -309,7 +309,7 @@ export default function DashboardHome() {
 
                     {/* Session Feedback */}
                     <Link
-                        href="/plans"
+                        href="/session-feedback"
                         className="group rounded-lg border bg-card p-6 transition-all hover:shadow-lg hover:-translate-y-1"
                     >
                         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary/10 text-secondary">

@@ -171,6 +171,56 @@ export default function PlanDetailPage({ params }: { params: Promise<{ id: strin
                                 </div>
                             )}
 
+                            {/* Publish Button - Only show for DRAFT plans */}
+                            {plan.status === "DRAFT" && (
+                                <button
+                                    onClick={async () => {
+                                        try {
+                                            const confirmed = confirm(
+                                                "Publish this training plan?\n\n" +
+                                                "Once published:\n" +
+                                                "• Sessions will appear in Session Feedback\n" +
+                                                "• Trainers can provide feedback\n" +
+                                                "• Plan will be visible to all users\n\n" +
+                                                "Do you want to continue?"
+                                            );
+
+                                            if (!confirmed) return;
+
+                                            const response = await fetch(`/api/plans/${id}/publish`, {
+                                                method: 'PUT',
+                                            });
+
+                                            const data = await response.json();
+
+                                            if (data.success) {
+                                                alert("✅ Plan published successfully!");
+                                                window.location.reload();
+                                            } else {
+                                                throw new Error(data.error || "Failed to publish plan");
+                                            }
+                                        } catch (error: any) {
+                                            console.error('Publish error:', error);
+                                            alert(`Failed to publish plan: ${error.message}`);
+                                        }
+                                    }}
+                                    className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 flex items-center gap-2"
+                                >
+                                    <svg
+                                        className="h-4 w-4"
+                                        fill="none"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Publish Plan
+                                </button>
+                            )}
+
                             <button
                                 onClick={async () => {
                                     try {
