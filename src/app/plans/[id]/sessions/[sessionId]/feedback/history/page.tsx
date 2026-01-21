@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import Link from "next/link";
 
 interface Feedback {
@@ -28,8 +28,11 @@ interface Stats {
 export default function FeedbackHistoryPage({
     params,
 }: {
-    params: { id: string; sessionId: string };
+    params: Promise<{ id: string; sessionId: string }>;
 }) {
+    // Unwrap params using React.use()
+    const { id, sessionId } = use(params);
+
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
     const [stats, setStats] = useState<Stats | null>(null);
     const [loading, setLoading] = useState(true);
@@ -37,13 +40,13 @@ export default function FeedbackHistoryPage({
 
     useEffect(() => {
         fetchFeedback();
-    }, [params.sessionId]);
+    }, [sessionId]);
 
     const fetchFeedback = async () => {
         try {
             setLoading(true);
             const response = await fetch(
-                `/api/plans/${params.id}/sessions/${params.sessionId}/feedback`
+                `/api/plans/${id}/sessions/${sessionId}/feedback`
             );
             const data = await response.json();
 
@@ -77,7 +80,7 @@ export default function FeedbackHistoryPage({
                 {/* Header */}
                 <div className="mb-8">
                     <Link
-                        href={`/plans/${params.id}`}
+                        href={`/plans/${id}`}
                         className="mb-4 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
                     >
                         ← Back to Plan
@@ -126,7 +129,7 @@ export default function FeedbackHistoryPage({
                             No feedback has been submitted for this session yet.
                         </p>
                         <Link
-                            href={`/plans/${params.id}/sessions/${params.sessionId}/feedback`}
+                            href={`/plans/${id}/sessions/${sessionId}/feedback`}
                             className="inline-block rounded-lg bg-primary px-6 py-3 font-semibold text-primary-foreground hover:bg-primary/90"
                         >
                             Submit Feedback

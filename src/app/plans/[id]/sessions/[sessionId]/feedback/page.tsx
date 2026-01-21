@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, use } from "react";
 import { useRouter } from "next/navigation";
 import FeedbackForm from "@/components/FeedbackForm";
 
@@ -8,21 +8,25 @@ export default function SessionFeedbackPage({
     params,
     searchParams,
 }: {
-    params: { id: string; sessionId: string };
-    searchParams: { sessionTitle?: string; sessionNumber?: string };
+    params: Promise<{ id: string; sessionId: string }>;
+    searchParams: Promise<{ sessionTitle?: string; sessionNumber?: string }>;
 }) {
     const router = useRouter();
     const [success, setSuccess] = useState(false);
 
+    // Unwrap params and searchParams using React.use()
+    const { id, sessionId } = use(params);
+    const { sessionTitle, sessionNumber } = use(searchParams);
+
     const handleSuccess = () => {
         setSuccess(true);
         setTimeout(() => {
-            router.push(`/plans/${params.id}`);
+            router.push(`/plans/${id}`);
         }, 2000);
     };
 
     const handleCancel = () => {
-        router.push(`/plans/${params.id}`);
+        router.push(`/plans/${id}`);
     };
 
     if (success) {
@@ -44,10 +48,10 @@ export default function SessionFeedbackPage({
             <div className="mx-auto max-w-3xl">
                 <div className="rounded-lg border bg-card p-8">
                     <FeedbackForm
-                        planId={params.id}
-                        sessionId={params.sessionId}
-                        sessionTitle={searchParams.sessionTitle || "Training Session"}
-                        sessionNumber={parseInt(searchParams.sessionNumber || "1")}
+                        planId={id}
+                        sessionId={sessionId}
+                        sessionTitle={sessionTitle || "Training Session"}
+                        sessionNumber={parseInt(sessionNumber || "1")}
                         onSuccess={handleSuccess}
                         onCancel={handleCancel}
                     />
