@@ -92,7 +92,7 @@ export default function VoiceRecorder({ onTranscriptionComplete, language = "hi"
     };
 
     return (
-        <div className="rounded-lg border bg-card p-6">
+        <div className="rounded-lg border bg-card p-6 opacity-60">
             <div className="mb-4">
                 <h3 className="text-lg font-semibold">🎤 Voice Recording</h3>
                 <p className="text-sm text-muted-foreground">
@@ -100,12 +100,35 @@ export default function VoiceRecorder({ onTranscriptionComplete, language = "hi"
                 </p>
             </div>
 
-            {/* Recording Button */}
+            {/* Feature Down Warning */}
+            <div className="mb-4 rounded-lg border border-warning bg-warning/10 p-3">
+                <div className="flex items-center gap-2">
+                    <svg
+                        className="h-5 w-5 text-warning flex-shrink-0"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <p className="text-sm font-semibold text-warning">
+                        Voice feature is currently down
+                    </p>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1 ml-7">
+                    We're working to restore this feature. Please use the web form to report needs.
+                </p>
+            </div>
+
+            {/* Recording Button - Disabled */}
             <div className="flex items-center gap-4">
                 {!isRecording && !isProcessing && (
                     <button
-                        onClick={startRecording}
-                        className="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-white hover:bg-primary/90"
+                        disabled
+                        className="flex items-center gap-2 rounded-lg bg-muted px-6 py-3 text-muted-foreground cursor-not-allowed opacity-50"
                     >
                         <svg
                             className="h-5 w-5"
