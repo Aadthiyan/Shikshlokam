@@ -1,23 +1,34 @@
 # DIET Training OS - Personalized Training Design Platform
 
+<br/>
+
+## 📋 Project Information
+
 **Hackathon Project:** January 2-22, 2026  
-**For:** DIETs/SCERTs - Transforming Teacher Training in India
-**Live on:** https://educohort-nine.vercel.app/
-**Demo video:** https://www.youtube.com/watch?v=l-Sz-oqF-6k
+
+**For:** DIETs/SCERTs - Transforming Teacher Training in India  
+
+**Live Demo:** [https://educohort-nine.vercel.app/](https://educohort-nine.vercel.app/)  
+
+**Demo Video:** [Watch on YouTube](https://www.youtube.com/watch?v=l-Sz-oqF-6k)
+
+<br/>
 
 ---
 
-## 🎯 **Project Overview**
+<br/>
+
+## 🎯 Project Overview
 
 A web platform that enables DIETs (District Institutes of Education and Training) and SCERTs (State Council of Educational Research and Training) to design personalized, micro-learning-based teacher training programs using AI assistance.
 
-### **The Problem**
+### The Problem
 - Teacher training in India uses static, one-size-fits-all manuals
 - DIETs struggle to contextualize training for local languages, infrastructure, and specific needs
 - Manual revision cycles take months/years
 - Weak feedback loops from classrooms
 
-### **Our Solution**
+### Our Solution
 1. **Capture needs** from field (BRPs/CRPs report classroom challenges)
 2. **Group into cohorts** (similar needs, language, infrastructure)
 3. **AI-assisted plan generation** (contextualized, micro-learning modules)
@@ -25,14 +36,14 @@ A web platform that enables DIETs (District Institutes of Education and Training
 
 ---
 
-## 🚀 **Quick Start**
+## 🚀 Quick Start
 
-### **Prerequisites**
+### Prerequisites
 - Node.js 18+ 
 - PostgreSQL database
 - Groq API key (free at console.groq.com)
 
-### **Installation**
+### Installation
 
 ```bash
 # Clone the repository
@@ -60,7 +71,7 @@ Visit `http://localhost:3000`
 
 ---
 
-## 📁 **Project Structure**
+## 📁 Project Structure
 
 ```
 diet-training-os/
@@ -78,55 +89,55 @@ diet-training-os/
 
 ---
 
-## 🛠️ **Tech Stack**
+## 🛠️ Tech Stack
 
-### **Frontend**
+### Frontend
 - **Next.js 14** (React + TypeScript)
 - **Tailwind CSS** (Styling)
 - **Radix UI** (Accessible components)
 - **Lucide React** (Icons)
 
-### **Backend**
+### Backend
 - **Next.js API Routes**
 - **Prisma ORM** (Database)
 - **PostgreSQL** (Database)
 
-### **AI**
+### AI
 - **Groq** (Llama 3.1 70B - Free, Fast)
 - **OpenAI** (Optional fallback)
 
-### **Infrastructure**
+### Infrastructure
 - **Vercel** (Deployment)
 - **Supabase/Neon** (Database hosting)
 
 ---
 
-## 🎨 **Key Features**
+## 🎨 Key Features
 
-### **Phase 1: Needs Capture** ✅
+### Phase 1: Needs Capture ✅
 - BRPs/CRPs report classroom needs
 - Multi-select issues (FLN gaps, language mismatch, etc.)
 - Cluster/school selection
 
-### **Phase 2: Cohort Management** ✅
+### Phase 2: Cohort Management ✅
 - Automatic grouping by similarity
 - Cohort dashboard with filters
 - Real-time profiling
 
-### **Phase 3: AI-Assisted Plan Generation** 🚀
+### Phase 3: AI-Assisted Plan Generation 🚀
 - Rule-based module matching
 - LLM-powered contextualization
 - Drag-and-drop plan editor
 - PDF/DOCX export
 
-### **Phase 4: Feedback & Analytics** 📊
+### Phase 4: Feedback & Analytics 📊
 - Post-training feedback collection
 - Plan effectiveness metrics
 - Continuous improvement loop
 
 ---
 
-## 📚 **Data Sources**
+## 📚 Data Sources
 
 Our platform uses authentic data from official Indian education sources:
 
@@ -138,7 +149,7 @@ Our platform uses authentic data from official Indian education sources:
 
 ---
 
-## 🎯 **Alignment with NEP 2020**
+## 🎯 Alignment with NEP 2020
 
 - ✅ **Continuous Professional Development (CPD)** - 50-hour framework
 - ✅ **Competency-based training** - Targeted skill development
@@ -148,9 +159,9 @@ Our platform uses authentic data from official Indian education sources:
 
 ---
 
-## 🧪 **Development**
+## 🧪 Development
 
-### **Available Scripts**
+### Available Scripts
 
 ```bash
 npm run dev          # Start development server
@@ -163,7 +174,7 @@ npm run db:studio    # Open Prisma Studio
 npm run seed         # Seed sample data
 ```
 
-### **Environment Variables**
+### Environment Variables
 
 See `env.example` for required variables:
 - `DATABASE_URL` - PostgreSQL connection string
@@ -173,9 +184,9 @@ See `env.example` for required variables:
 
 ---
 
-## 📊 **Demo Scenario**
+## 📊 Demo Scenario
 
-**"Tribal FLN Cohort in Jharkhand"**
+### "Tribal FLN Cohort in Jharkhand"
 
 1. **Need Signal:** BRP reports 5 clusters in Dumka district
    - Issue: Severe FLN gaps
@@ -196,14 +207,14 @@ See `env.example` for required variables:
 
 ---
 
-## 🏆 **Hackathon Submission**
+## 🏆 Hackathon Submission
 
 **Timeline:** January 2-22, 2026  
 **Team:** [Your Team Name]  
 **Demo:** [Live URL]  
 **Video:** [Demo Video URL]
 
-### **Judging Criteria Alignment**
+### Judging Criteria Alignment
 
 | Criteria | How We Address It |
 |----------|-------------------|
@@ -215,13 +226,13 @@ See `env.example` for required variables:
 
 ---
 
-## 📝 **License**
+## 📝 License
 
 This project is built as a **Digital Public Good (DPG)** following open-source principles.
 
 ---
 
-## 🤝 **Contributing**
+## 🤝 Contributing
 
 This is a hackathon project. For questions or collaboration:
 - Email: [your-email]
@@ -229,7 +240,7 @@ This is a hackathon project. For questions or collaboration:
 
 ---
 
-## 🙏 **Acknowledgments**
+## 🙏 Acknowledgments
 
 - **NCERT/CIET** - NISHTHA FLN course structure
 - **DIKSHA** - Teacher training modules
