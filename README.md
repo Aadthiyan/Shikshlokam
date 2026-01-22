@@ -2,8 +2,8 @@
 
 **Hackathon Project:** January 2-22, 2026  
 **For:** DIETs/SCERTs - Transforming Teacher Training in India
-**Demo Video:https://www.youtube.com/watch?v=l-Sz-oqF-6k**
-**Live on:https://educohort-nine.vercel.app/**
+**Demo Video:**https://www.youtube.com/watch?v=l-Sz-oqF-6k
+**Live on:**https://educohort-nine.vercel.app/
 
 ---
 
